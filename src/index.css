@@ -1,69 +1,95 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
+  background: black;
+}
+
+.App {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  transition: all 250ms;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: sans-serif;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.pulsatingDot {
+  height: 12px;
+  width: 12px;
+  background-color: white;
+  border-radius: 100%;
+  opacity: 0;
+  animation: 1s ease-in-out alternate infinite pulsate;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+@keyframes pulsate {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.keyboard {
+  position: fixed;
+  bottom: 20vh;
+  display: grid;
+  grid-template-areas: 1fr 1fr;
+}
+
+.keyboard.pulsating {
+  animation: 1.5s ease-in-out alternate infinite pulsate;
+}
+
+.keyboard .white-keys {
+  grid-area: 1 / 1;
+  display: flex;
+}
+
+.keyboard .black-keys {
+  grid-area: 1 / 1;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.keyboard .white-keys div,
+.keyboard .black-keys div {
+  border: 1px white solid;
+  border-radius: 5px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  font-size: 1.2em;
+  line-height: 1.6em;
+  font-weight: 100;
+  transition: background 250ms, color 250ms;
+}
+
+.keyboard .white-keys div {
+  height: 100px;
+  width: 30px;
+}
+
+.keyboard .black-keys div {
+  position: relative;
+  width: 20px;
+  height: 60px;
+  background: black;
+}
+
+.keyboard div.blank {
+  visibility: hidden;
+}
+
+.keyboard div.pressed {
+  background: white;
+  color: black;
 }
