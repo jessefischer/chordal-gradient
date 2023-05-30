@@ -43,6 +43,7 @@ export default function App() {
   const [keysPressed, setKeysPressed] = useState<Array<number>>([]);
   const [keyCharsPressed, setKeyCharsPressed] = useState<Array<string>>([]);
   const [background, setBackground] = useState<string>();
+  const [opacity, setOpacity] = useState(0);
   const [angleInDeg, setAngleInDeg] = useState<number>(
     Math.floor(Math.random() * 360)
   );
@@ -105,13 +106,14 @@ export default function App() {
   useEffect(() => {
     if (keysPressed.length) {
       const hues = keysPressed.map(keyIndexToHue);
+      setOpacity(1);
       if (hues.length > 1) {
         setBackground(huesToLinearGradient(hues, angleInDeg, xPos, yPos));
       } else {
         setBackground(hueToColorString(hues[0]));
       }
     } else {
-      setBackground(undefined);
+      setOpacity(0);
       setAngleInDeg(Math.floor(Math.random() * 360));
       setXPos(Math.random() * 100);
       setYPos(Math.random() * 100);
@@ -171,7 +173,7 @@ export default function App() {
     <div
       className="App"
       style={{
-        background
+        background, opacity
       }}
     >
       <Keyboard {...{ keyCharsPressed }} />
