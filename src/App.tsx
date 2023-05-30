@@ -88,11 +88,13 @@ export default function App() {
   useEffect(() => {
     synthRef.current = new Tone.PolySynth(Tone.Synth, {
       oscillator: {
-        type: "sawtooth"
+        type: "fatsawtooth",
+        count: 4,
+        spread: 25
       },
       volume: -12,
       envelope: {
-        attack: 0.1,
+        attack: 0.025,
         decay: 5,
         sustain: 0.333,
         release: 0.8
@@ -100,8 +102,8 @@ export default function App() {
     });
 
 
-    const filter = new Tone.Filter(600, 'lowpass');
-    const chorus = new Tone.Chorus(3.333, 1, 0.25).start();
+    const filter = new Tone.Filter(900, 'lowpass');
+    const chorus = new Tone.Chorus(3.333, 1, 0.125).start();
     const feedbackDelay = new Tone.FeedbackDelay({delayTime: 0.75, feedback: 0.25, wet: 0.0625});
     const reverb = new Tone.Reverb({decay: 4, wet: 0.0625}).toDestination();
 
