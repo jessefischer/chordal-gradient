@@ -89,14 +89,21 @@ export default function App() {
     synthRef.current = new Tone.PolySynth(Tone.Synth, {
       oscillator: {
         type: "sawtooth"
-      }
+      },
+      volume: -12,
+      envelope: {
+        attack: 0.1,
+        decay: 5,
+        sustain: 0.333,
+        release: 0.8
+      },
     });
 
 
-    const filter = new Tone.Filter(700, 'lowpass');
-    const chorus = new Tone.Chorus(1.5, 2, 0.75).start();
-    const feedbackDelay = new Tone.FeedbackDelay({delayTime: 0.75, feedback: 0.25, wet: 0.125});
-    const reverb = new Tone.Reverb({decay: 8, wet: 0.5}).toDestination();
+    const filter = new Tone.Filter(600, 'lowpass');
+    const chorus = new Tone.Chorus(3.333, 1, 0.25).start();
+    const feedbackDelay = new Tone.FeedbackDelay({delayTime: 0.75, feedback: 0.25, wet: 0.0625});
+    const reverb = new Tone.Reverb({decay: 4, wet: 0.0625}).toDestination();
 
     synthRef.current.connect( filter );
     filter.connect( chorus );
@@ -140,8 +147,7 @@ export default function App() {
     }
     synthRef.current?.triggerAttack(
       Tone.Frequency(60 + index, "midi").toFrequency(),
-      Tone.now(),
-      0.666
+      Tone.now()
     );
     setKeyCharsPressed((keyCharsPressed) => {
       const newKeyCharsPressed = keyCharsPressed.slice();
