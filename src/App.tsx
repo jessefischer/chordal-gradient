@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { WebMidi } from "webmidi";
+import { NoteMessageEvent, WebMidi } from "webmidi";
 import { Keyboard } from "./Keyboard";
 import * as Tone from "tone";
 import "./index.css";
@@ -53,7 +53,7 @@ export default function App() {
 
   const synthRef = useRef<Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>>();
 
-  const onNoteOn = (e) => {
+  const onNoteOn = (e: NoteMessageEvent) => {
     const key = e.note.number - 60;
     setKeysPressed((keysPressed) => {
       if (keysPressed.includes(key)) {
@@ -65,7 +65,7 @@ export default function App() {
     });
   };
 
-  const onNoteOff = (e) => {
+  const onNoteOff = (e: NoteMessageEvent) => {
     const key = e.note.number - 60;
     setKeysPressed((keysPressed) => {
       const newKeysPressed = keysPressed.slice();
@@ -108,7 +108,7 @@ export default function App() {
     if (!initialized) {
       return;
     }
-    WebMidi.inputs.forEach((input, i) => {
+    WebMidi.inputs.forEach((input) => {
       input.addListener("noteon", onNoteOn);
       input.addListener("noteoff", onNoteOff);
     });
@@ -129,7 +129,7 @@ export default function App() {
       setXPos(Math.random() * 100);
       setYPos(Math.random() * 100);
     }
-  }, [keysPressed]);
+  }, [keysPressed, angleInDeg, xPos, yPos]);
 
   window.onkeydown = (e) => {
     const keyChar = e.key;
