@@ -22,7 +22,7 @@ const keys = [
   "l",
   "p",
   ";",
-  "'"
+  "'",
 ];
 
 const keyIndexToHue = (index: number) => Math.floor((index * 360) / 12);
@@ -82,7 +82,7 @@ export default function App() {
       .then(() => {
         setInitialized(true);
       })
-      .catch((err) => alert(err));
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(() => {
@@ -90,27 +90,30 @@ export default function App() {
       oscillator: {
         type: "fatsawtooth",
         count: 4,
-        spread: 25
+        spread: 25,
       },
       volume: -12,
       envelope: {
         attack: 0.025,
         decay: 5,
         sustain: 0.333,
-        release: 0.8
+        release: 0.8,
       },
     });
 
-
-    const filter = new Tone.Filter(900, 'lowpass');
+    const filter = new Tone.Filter(900, "lowpass");
     const chorus = new Tone.Chorus(3.333, 1, 0.125).start();
-    const feedbackDelay = new Tone.FeedbackDelay({delayTime: 0.75, feedback: 0.25, wet: 0.0625});
-    const reverb = new Tone.Reverb({decay: 4, wet: 0.0625}).toDestination();
+    const feedbackDelay = new Tone.FeedbackDelay({
+      delayTime: 0.75,
+      feedback: 0.25,
+      wet: 0.0625,
+    });
+    const reverb = new Tone.Reverb({ decay: 4, wet: 0.0625 }).toDestination();
 
-    synthRef.current.connect( filter );
-    filter.connect( chorus );
-    chorus.connect( feedbackDelay );
-    feedbackDelay.connect( reverb );
+    synthRef.current.connect(filter);
+    filter.connect(chorus);
+    chorus.connect(feedbackDelay);
+    feedbackDelay.connect(reverb);
   }, []);
 
   useEffect(() => {
@@ -191,17 +194,22 @@ export default function App() {
   };
 
   return (
-    <div
-      className="App"
-      style={{
-        background, opacity
-      }}
-    >
+    <div className="App">
+      <div
+        className="backdrop"
+        style={{
+          background,
+          opacity,
+        }}
+      />
+      <div
+        className={
+          keyCharsPressed.length ? "helper-text-hidden" : "helper-text"
+        }
+      >
+        [press and hold a key combination to create your chordal gradient]
+      </div>
       <Keyboard {...{ keyCharsPressed }} />
-      {/* <div
-        className="pulsatingDot"
-        style={{ display: keysPressed.length ? "none" : "block" }}
-      /> */}
     </div>
   );
 }

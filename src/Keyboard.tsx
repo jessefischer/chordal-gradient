@@ -2,11 +2,11 @@ const whiteKeys = "asdfghjkl;";
 const blackKeys = "we tyu op";
 
 export const Keyboard = ({
-  keyCharsPressed
+  keyCharsPressed,
 }: {
   keyCharsPressed: Array<string>;
 }) => (
-  <div className={keyCharsPressed.length ? "keyboard" : "keyboard pulsating"}>
+  <div className="keyboard">
     <div className="white-keys">
       {Array.from(whiteKeys).map((char, i) => (
         <div
