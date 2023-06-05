@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { NoteMessageEvent, WebMidi } from "webmidi";
 
-import * as Tone from "tone";
-import "./index.css";
-import { Overlay } from "./Overlay";
 import { Controls } from "./Controls";
+import { Overlay } from "./Overlay";
+import { Backdrop } from "./Backdrop";
+import { SynthConnector } from "./SynthConnector";
+
+import "./index.css";
 
 const keys = [
   "a",
@@ -55,8 +57,6 @@ export default function App() {
 
   const [isMuted, setMuted] = useState(false);
 
-  const synthRef = useRef<Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>>();
-
   const onNoteOn = (e: NoteMessageEvent) => {
     const key = e.note.number - 60;
     setKeysPressed((keysPressed) => {
@@ -90,37 +90,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    synthRef.current = new Tone.PolySynth(Tone.Synth, {
-      oscillator: {
-        type: "fatsawtooth",
-        count: 4,
-        spread: 25,
-      },
-      volume: -12,
-      envelope: {
-        attack: 0.025,
-        decay: 5,
-        sustain: 0.333,
-        release: 0.8,
-      },
-    });
-
-    const filter = new Tone.Filter(900, "lowpass");
-    const chorus = new Tone.Chorus(3.333, 1, 0.125).start();
-    const feedbackDelay = new Tone.FeedbackDelay({
-      delayTime: 0.75,
-      feedback: 0.25,
-      wet: 0.0625,
-    });
-    const reverb = new Tone.Reverb({ decay: 4, wet: 0.0625 }).toDestination();
-
-    synthRef.current.connect(filter);
-    filter.connect(chorus);
-    chorus.connect(feedbackDelay);
-    feedbackDelay.connect(reverb);
-  }, []);
-
-  useEffect(() => {
     if (!initialized) {
       return;
     }
@@ -150,14 +119,11 @@ export default function App() {
   window.onkeydown = (e) => {
     const keyChar = e.key;
 
+    console.log("keydown)");
     const index = keys.indexOf(keyChar);
     if (keysPressed.includes(index) || index < 0) {
       return;
     }
-    synthRef.current?.triggerAttack(
-      Tone.Frequency(60 + index, "midi").toFrequency(),
-      Tone.now()
-    );
     setKeyCharsPressed((keyCharsPressed) => {
       const newKeyCharsPressed = keyCharsPressed.slice();
       if (!newKeyCharsPressed.includes(keyChar)) {
@@ -168,6 +134,7 @@ export default function App() {
     const newKeysPressed = keysPressed.slice();
     newKeysPressed.push(index);
     setKeysPressed(newKeysPressed);
+    console.log({ newKeysPressed });
   };
 
   window.onkeyup = (e) => {
@@ -186,9 +153,7 @@ export default function App() {
     if (index < 0) {
       return;
     }
-    synthRef.current?.triggerRelease(
-      Tone.Frequency(60 + index, "midi").toFrequency()
-    );
+
     const newKeysPressed = keysPressed.slice();
     const keyIndex = newKeysPressed.indexOf(index);
     if (keyIndex > -1) {
@@ -197,20 +162,10 @@ export default function App() {
     setKeysPressed(newKeysPressed);
   };
 
-  useEffect(() => {
-    if (!synthRef.current) return;
-    synthRef.current.volume.value = isMuted ? -Infinity : 0;
-  }, [isMuted]);
-
   return (
     <div className="app">
-      <div
-        className="backdrop"
-        style={{
-          background,
-          opacity,
-        }}
-      />
+      <Backdrop {...{ background, opacity }} />
+      <SynthConnector {...{ keysPressed }} isMuted={isMuted} />
       <Overlay {...{ keyCharsPressed }} />
       <Controls isMuted={isMuted} toggleMuted={() => setMuted(!isMuted)} />
     </div>
