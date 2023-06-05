@@ -202,13 +202,13 @@ export default function App() {
           opacity,
         }}
       />
-      <div
+      <p
         className={
           keyCharsPressed.length ? "helper-text-hidden" : "helper-text"
         }
       >
-        [press and hold a key combination to create your chordal gradient]
-      </div>
+        Press and hold a key combination to create your Rainbow Sound identity.
+      </p>
       <Keyboard {...{ keyCharsPressed }} />
     </div>
   );
