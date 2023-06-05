@@ -13,7 +13,7 @@ body {
   align-items: center;
   justify-content: center;
   color: white;
-  font-family: "Courier", "Courier New", Courier, monospace;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .backdrop {
@@ -49,13 +49,16 @@ body {
   display: grid;
   grid-template-areas: 1fr 1fr;
   animation: 1.5s ease-in-out pulsate;
+  text-transform: uppercase;
 }
 
 .helper-text {
   animation: 1.5s ease-in-out pulsate;
   animation-delay: 2s;
   animation-fill-mode: both;
-  transition: opacity 250ms;
+  transition: opacity 100ms;
+  font-weight: bold;
+  text-align: center;
 }
 
 .helper-text-hidden {
