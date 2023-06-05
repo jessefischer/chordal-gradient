@@ -3,6 +3,7 @@ import { NoteMessageEvent, WebMidi } from "webmidi";
 import { Keyboard } from "./Keyboard";
 import * as Tone from "tone";
 import "./index.css";
+import { Overlay } from "./Overlay";
 
 const keys = [
   "a",
@@ -194,7 +195,7 @@ export default function App() {
   };
 
   return (
-    <div className="App">
+    <div className="app">
       <div
         className="backdrop"
         style={{
@@ -202,14 +203,7 @@ export default function App() {
           opacity,
         }}
       />
-      <p
-        className={
-          keyCharsPressed.length ? "helper-text-hidden" : "helper-text"
-        }
-      >
-        Press and hold a key combination to create your Rainbow Sound identity.
-      </p>
-      <Keyboard {...{ keyCharsPressed }} />
+      <Overlay {...{ keyCharsPressed }} />
     </div>
   );
 }
