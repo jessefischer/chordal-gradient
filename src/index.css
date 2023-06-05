@@ -58,6 +58,7 @@ body {
   grid-template-areas: 1fr 1fr;
   animation: 1.5s ease-in-out pulsate;
   text-transform: uppercase;
+  user-select: none;
 }
 
 .helper-text {
