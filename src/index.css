@@ -82,6 +82,7 @@ body {
 .keyboard .white-keys {
   grid-area: 1 / 1;
   display: flex;
+  justify-content: center;
 }
 
 .keyboard .black-keys {

@@ -1,15 +1,17 @@
 import { useEffect, useRef } from "react";
 import * as Tone from "tone";
 
-export const SynthConnector = ({
-  keysPressed,
-  isMuted,
-}: {
-  keysPressed: Array<number>;
+interface ISynthConnectorProps {
+  activeNotes: Array<number>;
   isMuted: boolean;
-}) => {
+}
+
+export const SynthConnector = ({
+  activeNotes,
+  isMuted,
+}: ISynthConnectorProps) => {
   const synthRef = useRef<Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>>();
-  const lastKeysPressed = useRef<Array<number>>([]);
+  const previousNotes = useRef<Array<number>>([]);
 
   /* Initialize synth */
   useEffect(() => {
@@ -45,24 +47,24 @@ export const SynthConnector = ({
 
   useEffect(() => {
     /* For each new key added, trigger attack of that note */
-    keysPressed
-      .filter((key) => !lastKeysPressed.current.includes(key))
-      .forEach((key) => {
+    activeNotes
+      .filter((note) => !previousNotes.current.includes(note))
+      .forEach((note) => {
         synthRef.current?.triggerAttack(
-          Tone.Frequency(60 + key, "midi").toFrequency(),
+          Tone.Frequency(note, "midi").toFrequency(),
           Tone.now()
         );
       });
     /* For each key removed, trigger release of that note */
-    lastKeysPressed.current
-      .filter((key) => !keysPressed.includes(key))
-      .forEach((key) => {
+    previousNotes.current
+      .filter((note) => !activeNotes.includes(note))
+      .forEach((note) => {
         synthRef.current?.triggerRelease(
-          Tone.Frequency(60 + key, "midi").toFrequency()
+          Tone.Frequency(note, "midi").toFrequency()
         );
       });
-    lastKeysPressed.current = keysPressed.slice();
-  }, [keysPressed]);
+    previousNotes.current = activeNotes.slice();
+  }, [activeNotes]);
 
   /* Update volume on change of muted state */
   useEffect(() => {

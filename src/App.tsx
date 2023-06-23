@@ -1,49 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { NoteMessageEvent, WebMidi } from "webmidi";
 
 import { Controls } from "./Controls";
-import { Overlay } from "./Overlay";
-import { Backdrop } from "./Backdrop";
+import { KeyboardGroup } from "./KeyboardGroup";
 import { SynthConnector } from "./SynthConnector";
 
 import "./index.css";
 
-const keys = [
-  "a",
-  "w",
-  "s",
-  "e",
-  "d",
-  "f",
-  "t",
-  "g",
-  "y",
-  "h",
-  "u",
-  "j",
-  "k",
-  "o",
-  "l",
-  "p",
-  ";",
-  "'",
-];
+import { KEYS, MIDDLE_C } from "./constants";
 
 export default function App() {
-  const [keysPressed, setKeysPressed] = useState<Array<number>>([]);
-  const [keyCharsPressed, setKeyCharsPressed] = useState<Array<string>>([]);
+  const [activeNotes, setActiveNotes] = useState<Array<number>>([]);
+  const [isMuted, setMuted] = useState(false);
 
   // const [initialized, setInitialized] = useState(false);
 
-  const [isMuted, setMuted] = useState(false);
-
   // const onNoteOn = (e: NoteMessageEvent) => {
   //   const key = e.note.number - 60;
-  //   setKeysPressed((keysPressed) => {
-  //     if (keysPressed.includes(key)) {
-  //       return keysPressed;
+  //   setKeysPressed((KEYSPressed) => {
+  //     if (KEYSPressed.includes(key)) {
+  //       return KEYSPressed;
   //     }
-  //     const newKeysPressed = keysPressed.slice();
+  //     const newKeysPressed = KEYSPressed.slice();
   //     newKeysPressed.push(key);
   //     return newKeysPressed;
   //   });
@@ -51,8 +29,8 @@ export default function App() {
 
   // const onNoteOff = (e: NoteMessageEvent) => {
   //   const key = e.note.number - 60;
-  //   setKeysPressed((keysPressed) => {
-  //     const newKeysPressed = keysPressed.slice();
+  //   setKeysPressed((KEYSPressed) => {
+  //     const newKeysPressed = KEYSPressed.slice();
   //     const index = newKeysPressed.indexOf(key);
   //     if (index > -1) {
   //       newKeysPressed.splice(index, 1);
@@ -79,56 +57,38 @@ export default function App() {
   //   });
   // }, [initialized]);
 
-  window.onkeydown = (e) => {
-    const keyChar = e.key;
+  useEffect(() => {
+    window.onkeydown = (e) => {
+      if (!KEYS.includes(e.key)) return;
 
-    const index = keys.indexOf(keyChar);
-    if (keysPressed.includes(index) || index < 0) {
-      return;
-    }
-    setKeyCharsPressed((keyCharsPressed) => {
-      const newKeyCharsPressed = keyCharsPressed.slice();
-      if (!newKeyCharsPressed.includes(keyChar)) {
-        newKeyCharsPressed.push(keyChar);
-      }
-      return newKeyCharsPressed;
-    });
-    const newKeysPressed = keysPressed.slice();
-    newKeysPressed.push(index);
-    setKeysPressed(newKeysPressed);
-    console.log({ newKeysPressed });
-  };
+      const note = KEYS.indexOf(e.key) + MIDDLE_C;
 
-  window.onkeyup = (e) => {
-    const keyChar = e.key;
-    setKeyCharsPressed((keyCharsPressed) => {
-      const newKeyCharsPressed = keyCharsPressed.slice();
-      if (newKeyCharsPressed.includes(keyChar)) {
-        const keyCharIndex = newKeyCharsPressed.indexOf(keyChar);
-        if (keyCharIndex > -1) {
-          newKeyCharsPressed.splice(keyCharIndex, 1);
-        }
-      }
-      return newKeyCharsPressed;
-    });
-    const index = keys.indexOf(keyChar);
-    if (index < 0) {
-      return;
-    }
+      if (activeNotes.includes(note)) return;
 
-    const newKeysPressed = keysPressed.slice();
-    const keyIndex = newKeysPressed.indexOf(index);
-    if (keyIndex > -1) {
-      newKeysPressed.splice(keyIndex, 1);
-    }
-    setKeysPressed(newKeysPressed);
-  };
+      const updatedActiveNotes = activeNotes.slice();
+      updatedActiveNotes.push(note);
+      setActiveNotes(updatedActiveNotes);
+    };
+
+    window.onkeyup = (e) => {
+      if (!KEYS.includes(e.key)) return;
+
+      const note = KEYS.indexOf(e.key) + MIDDLE_C;
+
+      if (!activeNotes.includes(note)) return;
+
+      const updatedActiveNotes = activeNotes.slice();
+      updatedActiveNotes.splice(activeNotes.indexOf(note), 1);
+
+      setActiveNotes(updatedActiveNotes);
+    };
+  }, [activeNotes]);
 
   return (
     <div className="app">
-      <Backdrop keysPressed={keysPressed} />
-      <SynthConnector {...{ keysPressed }} isMuted={isMuted} />
-      <Overlay {...{ keyCharsPressed }} />
+      {/* <Backdrop activeNotes={activeNotes} /> */}
+      <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
+      <KeyboardGroup activeNotes={activeNotes} />
       <Controls isMuted={isMuted} toggleMuted={() => setMuted(!isMuted)} />
     </div>
   );
