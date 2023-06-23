@@ -13,7 +13,7 @@ body {
   align-items: center;
   justify-content: center;
   color: white;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .backdrop {
@@ -123,4 +123,30 @@ body {
 .keyboard div.pressed {
   background: white;
   color: black;
+}
+
+.controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.controls button {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 100%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.controls button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.controls button svg {
+  fill: white;
 }

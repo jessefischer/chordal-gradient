@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { NoteMessageEvent, WebMidi } from "webmidi";
-import { Keyboard } from "./Keyboard";
+
 import * as Tone from "tone";
 import "./index.css";
 import { Overlay } from "./Overlay";
+import { Controls } from "./Controls";
 
 const keys = [
   "a",
@@ -51,6 +52,8 @@ export default function App() {
   const [xPos, setXPos] = useState<number>(Math.random() * 100);
   const [yPos, setYPos] = useState<number>(Math.random() * 100);
   const [initialized, setInitialized] = useState(false);
+
+  const [isMuted, setMuted] = useState(false);
 
   const synthRef = useRef<Tone.PolySynth<Tone.Synth<Tone.SynthOptions>>>();
 
@@ -194,6 +197,11 @@ export default function App() {
     setKeysPressed(newKeysPressed);
   };
 
+  useEffect(() => {
+    if (!synthRef.current) return;
+    synthRef.current.volume.value = isMuted ? -Infinity : 0;
+  }, [isMuted]);
+
   return (
     <div className="app">
       <div
@@ -204,6 +212,7 @@ export default function App() {
         }}
       />
       <Overlay {...{ keyCharsPressed }} />
+      <Controls isMuted={isMuted} toggleMuted={() => setMuted(!isMuted)} />
     </div>
   );
 }
