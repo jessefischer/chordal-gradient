@@ -5,7 +5,7 @@ interface IKeyboardGroupProps {
 }
 
 export const KeyboardGroup = ({ activeNotes }: IKeyboardGroupProps) => (
-  <div className="KeyboardGroup">
+  <div className="keyboard-group">
     <p className={activeNotes.length ? "helper-text-hidden" : "helper-text"}>
       Press and hold or tap a key combination to create your Rainbow Sound
       Identity.

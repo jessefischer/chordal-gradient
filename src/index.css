@@ -43,7 +43,7 @@ body {
   }
 }
 
-.overlay {
+.keyboard-group {
   position: fixed;
   bottom: 8em;
   width: 80vw;
