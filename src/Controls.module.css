@@ -1,0 +1,25 @@
+.controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px;
+  display: flex;
+  justify-content: flex-end;
+
+  & button {
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: 100%;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  & button:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  & button svg {
+    fill: white;
+  }
+}

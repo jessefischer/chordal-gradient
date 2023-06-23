@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { KEYS, MIDDLE_C } from "./constants";
 
+import styles from "./Backdrop.module.css";
+
 const noteToHue = (note: number) =>
   Math.floor(((note - MIDDLE_C) * 360) / KEYS.length);
 
@@ -54,7 +56,7 @@ export const Backdrop = ({ activeNotes }: IBackdropProps) => {
 
   return (
     <div
-      className="backdrop"
+      className={styles.backdrop}
       style={{
         background,
         opacity,

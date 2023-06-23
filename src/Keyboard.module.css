@@ -1,0 +1,60 @@
+.keyboard {
+  display: grid;
+  grid-template-areas: 1fr 1fr;
+  animation: 1.5s ease-in-out pulsate;
+  text-transform: uppercase;
+  user-select: none;
+
+  .white-keys {
+    grid-area: 1 / 1;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .black-keys {
+    grid-area: 1 / 1;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .white-keys div,
+  .black-keys div {
+    pointer-events: auto;
+    user-select: none;
+    border: 1px white solid;
+    border-radius: 5px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    line-height: 1.6em;
+    transition: background 250ms, color 250ms;
+  }
+
+  .white-keys div {
+    height: 100px;
+    width: 30px;
+  }
+
+  .black-keys div {
+    position: relative;
+    width: 20px;
+    height: 60px;
+    background: black;
+  }
+
+  & div.blank {
+    visibility: hidden;
+  }
+
+  & div.pressed {
+    background: white;
+    color: black;
+  }
+}

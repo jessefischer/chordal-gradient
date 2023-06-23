@@ -4,7 +4,7 @@ import { Controls } from "./Controls";
 import { KeyboardGroup } from "./KeyboardGroup";
 import { SynthConnector } from "./SynthConnector";
 
-import "./index.css";
+import styles from "./App.module.css";
 
 import { KEYS, MIDDLE_C } from "./constants";
 import { Backdrop } from "./Backdrop";
@@ -52,7 +52,7 @@ export default function App() {
   }, [activeNotes, handleKeyDown, handleKeyUp]);
 
   return (
-    <div className="app">
+    <div className={styles.app}>
       <Backdrop activeNotes={activeNotes} />
       <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
       <MIDIConnector setActiveNotes={setActiveNotes} />
