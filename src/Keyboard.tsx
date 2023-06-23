@@ -5,9 +5,15 @@ const whiteKeys = "asdfghjkl;";
 
 interface IKeyboardProps {
   activeNotes: Array<number>;
+  onKeyDown: (note: number) => void;
+  onKeyUp: (note: number) => void;
 }
 
-export const Keyboard = ({ activeNotes }: IKeyboardProps) => {
+export const Keyboard = ({
+  activeNotes,
+  onKeyDown,
+  onKeyUp,
+}: IKeyboardProps) => {
   const activeKeys = activeNotes.map((note) => KEYS[note - MIDDLE_C]);
   return (
     <div className="keyboard">
@@ -16,6 +22,11 @@ export const Keyboard = ({ activeNotes }: IKeyboardProps) => {
           <div
             key={key + i}
             className={activeKeys.includes(key) ? "pressed" : undefined}
+            onMouseDown={() => onKeyDown(KEYS.indexOf(key) + MIDDLE_C)}
+            onMouseUp={() => onKeyUp(KEYS.indexOf(key) + MIDDLE_C)}
+            onMouseLeave={() => onKeyUp(KEYS.indexOf(key) + MIDDLE_C)}
+            onTouchStart={() => onKeyDown(KEYS.indexOf(key) + MIDDLE_C)}
+            onTouchEnd={() => onKeyUp(KEYS.indexOf(key) + MIDDLE_C)}
           >
             {key}
           </div>
@@ -32,6 +43,11 @@ export const Keyboard = ({ activeNotes }: IKeyboardProps) => {
                 ? "pressed"
                 : undefined
             }
+            onMouseDown={() => onKeyDown(KEYS.indexOf(key) + MIDDLE_C)}
+            onMouseUp={() => onKeyUp(KEYS.indexOf(key) + MIDDLE_C)}
+            onMouseLeave={() => onKeyUp(KEYS.indexOf(key) + MIDDLE_C)}
+            onTouchStart={() => onKeyDown(KEYS.indexOf(key) + MIDDLE_C)}
+            onTouchEnd={() => onKeyUp(KEYS.indexOf(key) + MIDDLE_C)}
           >
             {key}
           </div>
