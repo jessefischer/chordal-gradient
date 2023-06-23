@@ -40,9 +40,9 @@ export const Keyboard = ({
             key={key + i}
             className={
               key === " "
-                ? "blank"
+                ? styles.blank
                 : activeKeys.includes(key)
-                ? "pressed"
+                ? styles.pressed
                 : undefined
             }
             onMouseDown={() => onKeyDown(KEYS.indexOf(key) + MIDDLE_C)}
