@@ -8,6 +8,7 @@ import { SynthConnector } from "./SynthConnector";
 import "./index.css";
 
 import { KEYS, MIDDLE_C } from "./constants";
+import { Backdrop } from "./Backdrop";
 
 export default function App() {
   const [activeNotes, setActiveNotes] = useState<Array<number>>([]);
@@ -86,7 +87,7 @@ export default function App() {
 
   return (
     <div className="app">
-      {/* <Backdrop activeNotes={activeNotes} /> */}
+      <Backdrop activeNotes={activeNotes} />
       <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
       <KeyboardGroup activeNotes={activeNotes} />
       <Controls isMuted={isMuted} toggleMuted={() => setMuted(!isMuted)} />
