@@ -58,6 +58,7 @@ body {
   grid-template-areas: 1fr 1fr;
   animation: 1.5s ease-in-out pulsate;
   text-transform: uppercase;
+  user-select: none;
 }
 
 .helper-text {
@@ -83,6 +84,7 @@ body {
   display: flex;
   justify-content: center;
   pointer-events: none;
+  user-select: none;
 }
 
 .keyboard .black-keys {
@@ -91,6 +93,7 @@ body {
   gap: 10px;
   justify-content: center;
   pointer-events: none;
+  user-select: none;
 }
 
 .keyboard .white-keys div,
