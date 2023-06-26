@@ -12,7 +12,12 @@ import { MIDIConnector } from "./MIDIConnector";
 
 export default function App() {
   const [activeNotes, setActiveNotes] = useState<Array<number>>([]);
+  const [lastActiveNotes, setLastActiveNotes] = useState<Array<number>>([]);
+  const [prevActiveNotes, setPrevActiveNotes] = useState<Array<number>>([]);
+
   const [isMuted, setMuted] = useState(false);
+  const [isCapturingScreenShot, setIsCapturingScreenShot] = useState(false);
+  const [showUI, setShowUI] = useState(true);
 
   const handleKeyDown = useCallback(
     (note: number) => {
@@ -37,6 +42,16 @@ export default function App() {
     [activeNotes]
   );
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Link copied to clipboard");
+  };
+
+  const handleCaptureScreenShot = () => {
+    setIsCapturingScreenShot(true);
+    setPrevActiveNotes([]);
+  };
+
   useEffect(() => {
     window.onkeydown = (e) => {
       if (!KEYS.includes(e.key)) return;
@@ -51,17 +66,77 @@ export default function App() {
     };
   }, [activeNotes, handleKeyDown, handleKeyUp]);
 
+  /* Update lastActiveNotes */
+  useEffect(() => {
+    if (
+      activeNotes.length > lastActiveNotes.length ||
+      (activeNotes.length && prevActiveNotes.length === 0)
+    ) {
+      setLastActiveNotes(activeNotes.slice());
+    }
+  }, [activeNotes, lastActiveNotes.length, prevActiveNotes.length]);
+
+  /* Store previous activeNotes state */
+  useEffect(() => {
+    return () => setPrevActiveNotes(activeNotes.slice());
+  }, [activeNotes]);
+
+  /* Capture screen shot */
+  useEffect(() => {
+    if (
+      isCapturingScreenShot &&
+      prevActiveNotes.length &&
+      activeNotes.length === 0
+    ) {
+      setIsCapturingScreenShot(false);
+      alert(
+        "Captured screen shot from: " + window.location.href + "&showUI=false"
+      ); // TODO: add actual API call
+    }
+  }, [isCapturingScreenShot, activeNotes.length, prevActiveNotes.length]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams();
+    if (lastActiveNotes.length) {
+      searchParams.set("notes", JSON.stringify(lastActiveNotes));
+    }
+    history.pushState({}, "", "?" + searchParams.toString());
+  }, [lastActiveNotes, isMuted]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const activeNotesString = searchParams.get("notes");
+    const showUIString = searchParams.get("showUI");
+    if (showUIString) {
+      setShowUI(JSON.parse(showUIString));
+    }
+    if (activeNotesString) {
+      setActiveNotes(JSON.parse(activeNotesString));
+      setMuted(true);
+    }
+  }, []);
+
   return (
     <div className={styles.app}>
       <Backdrop activeNotes={activeNotes} />
       <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
       <MIDIConnector setActiveNotes={setActiveNotes} />
-      <KeyboardGroup
-        activeNotes={activeNotes}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-      />
-      <Controls isMuted={isMuted} toggleMuted={() => setMuted(!isMuted)} />
+      {showUI && (
+        <>
+          <KeyboardGroup
+            activeNotes={activeNotes}
+            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
+          />
+          <Controls
+            isCapturingScreenShot={isCapturingScreenShot}
+            handleCaptureScreenShot={handleCaptureScreenShot}
+            handleCopyLink={handleCopyLink}
+            toggleMuted={() => setMuted(!isMuted)}
+            isMuted={isMuted}
+          />
+        </>
+      )}
     </div>
   );
 }
