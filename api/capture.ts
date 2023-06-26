@@ -37,9 +37,9 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   await page.waitForTimeout(1000);
 
   const uuid = Math.floor( Math.random() * 100000 );
-  await page.screenshot({path: `rainbow-sounds-${uuid}.png`});
+  await page.screenshot({path: `/tmp/rainbow-sounds-${uuid}.png`});
 
-  const file = path.join(process.cwd(), `rainbow-sounds-${uuid}.png`);
+  const file = path.join(process.cwd(), `/tmp/rainbow-sounds-${uuid}.png`);
   const stringified = readFileSync(file);
 
   res.setHeader('Content-Type', 'image/x-png');
