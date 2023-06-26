@@ -49,7 +49,7 @@ export default function App() {
 
   const handleCaptureScreenShot = () => {
     setIsCapturingScreenShot(true);
-    setTimeout(() => setIsCapturingScreenShot(false), 3000);
+    setPrevActiveNotes([]);
   };
 
   useEffect(() => {
@@ -80,6 +80,20 @@ export default function App() {
   useEffect(() => {
     return () => setPrevActiveNotes(activeNotes.slice());
   }, [activeNotes]);
+
+  /* Capture screen shot */
+  useEffect(() => {
+    if (
+      isCapturingScreenShot &&
+      prevActiveNotes.length &&
+      activeNotes.length === 0
+    ) {
+      setIsCapturingScreenShot(false);
+      alert(
+        "Captured screen shot from: " + window.location.href + "&showUI=false"
+      ); // TODO: add actual API call
+    }
+  }, [isCapturingScreenShot, activeNotes.length, prevActiveNotes.length]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams();
