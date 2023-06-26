@@ -13,6 +13,7 @@ import { MIDIConnector } from "./MIDIConnector";
 export default function App() {
   const [activeNotes, setActiveNotes] = useState<Array<number>>([]);
   const [isMuted, setMuted] = useState(false);
+  const [showUI, setShowUI] = useState(true);
 
   const handleKeyDown = useCallback(
     (note: number) => {
@@ -51,17 +52,43 @@ export default function App() {
     };
   }, [activeNotes, handleKeyDown, handleKeyUp]);
 
+  // useEffect(() => {
+  //   const searchParams = new URLSearchParams();
+  //   if (activeNotes.length) {
+  //     searchParams.set("activeNotes", JSON.stringify(activeNotes));
+  //   }
+  //   searchParams.set("isMuted", JSON.stringify(isMuted));
+  //   history.pushState({}, "", "?" + searchParams.toString());
+  // }, [activeNotes, isMuted]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const activeNotesString = searchParams.get("activeNotes");
+    const showUIString = searchParams.get("showUI");
+    if (showUIString) {
+      setShowUI(JSON.parse(showUIString));
+    }
+    if (activeNotesString) {
+      setActiveNotes(JSON.parse(activeNotesString));
+      setMuted(true);
+    }
+  }, []);
+
   return (
     <div className={styles.app}>
       <Backdrop activeNotes={activeNotes} />
       <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
       <MIDIConnector setActiveNotes={setActiveNotes} />
-      <KeyboardGroup
-        activeNotes={activeNotes}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-      />
-      <Controls isMuted={isMuted} toggleMuted={() => setMuted(!isMuted)} />
+      {showUI && (
+        <>
+          <KeyboardGroup
+            activeNotes={activeNotes}
+            onKeyDown={handleKeyDown}
+            onKeyUp={handleKeyUp}
+          />
+          <Controls isMuted={isMuted} toggleMuted={() => setMuted(!isMuted)} />
+        </>
+      )}
     </div>
   );
 }
