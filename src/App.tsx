@@ -92,7 +92,7 @@ export default function App() {
     ) {
       setIsCapturingScreenShot(false);
       window.location.href =
-        "http://localhost:3000/api/capture?notes=" +
+        "https://rainbow-sounds.vercel.app/api/capture?notes=" +
         encodeURIComponent(JSON.stringify(lastActiveNotes));
     }
   }, [
