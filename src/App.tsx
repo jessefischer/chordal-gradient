@@ -91,24 +91,23 @@ export default function App() {
       activeNotes.length === 0
     ) {
       setIsCapturingScreenShot(false);
-      alert(
-        "Captured screen shot from: " + window.location.href + "&showUI=false"
-      ); // TODO: add actual API call
+      window.location.href =
+        "https://rainbow-sounds.vercel.app/api/capture?notes=" +
+        encodeURIComponent(JSON.stringify(lastActiveNotes));
     }
-  }, [isCapturingScreenShot, activeNotes.length, prevActiveNotes.length]);
-
-  useEffect(() => {
-    const searchParams = new URLSearchParams();
-    if (lastActiveNotes.length) {
-      searchParams.set("notes", JSON.stringify(lastActiveNotes));
-    }
-    history.pushState({}, "", "?" + searchParams.toString());
-  }, [lastActiveNotes, isMuted]);
+  }, [
+    isCapturingScreenShot,
+    activeNotes.length,
+    prevActiveNotes.length,
+    lastActiveNotes,
+  ]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
+    console.log("searchParams", searchParams);
     const activeNotesString = searchParams.get("notes");
     const showUIString = searchParams.get("showUI");
+    console.log(showUIString, activeNotesString);
     if (showUIString) {
       setShowUI(JSON.parse(showUIString));
     }
@@ -117,6 +116,14 @@ export default function App() {
       setMuted(true);
     }
   }, []);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams();
+    if (lastActiveNotes.length) {
+      searchParams.set("notes", JSON.stringify(lastActiveNotes));
+    }
+    history.pushState({}, "", "?" + searchParams.toString());
+  }, [lastActiveNotes, isMuted]);
 
   return (
     <div className={styles.app}>
