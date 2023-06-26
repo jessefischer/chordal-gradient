@@ -12,7 +12,11 @@ import { MIDIConnector } from "./MIDIConnector";
 
 export default function App() {
   const [activeNotes, setActiveNotes] = useState<Array<number>>([]);
+  const [lastActiveNotes, setLastActiveNotes] = useState<Array<number>>([]);
+  const [prevActiveNotes, setPrevActiveNotes] = useState<Array<number>>([]);
+
   const [isMuted, setMuted] = useState(false);
+  const [isCapturingScreenShot, setIsCapturingScreenShot] = useState(false);
   const [showUI, setShowUI] = useState(true);
 
   const handleKeyDown = useCallback(
@@ -38,6 +42,16 @@ export default function App() {
     [activeNotes]
   );
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Link copied to clipboard");
+  };
+
+  const handleCaptureScreenShot = () => {
+    setIsCapturingScreenShot(true);
+    setTimeout(() => setIsCapturingScreenShot(false), 3000);
+  };
+
   useEffect(() => {
     window.onkeydown = (e) => {
       if (!KEYS.includes(e.key)) return;
@@ -52,18 +66,32 @@ export default function App() {
     };
   }, [activeNotes, handleKeyDown, handleKeyUp]);
 
-  // useEffect(() => {
-  //   const searchParams = new URLSearchParams();
-  //   if (activeNotes.length) {
-  //     searchParams.set("activeNotes", JSON.stringify(activeNotes));
-  //   }
-  //   searchParams.set("isMuted", JSON.stringify(isMuted));
-  //   history.pushState({}, "", "?" + searchParams.toString());
-  // }, [activeNotes, isMuted]);
+  /* Update lastActiveNotes */
+  useEffect(() => {
+    if (
+      activeNotes.length > lastActiveNotes.length ||
+      (activeNotes.length && prevActiveNotes.length === 0)
+    ) {
+      setLastActiveNotes(activeNotes.slice());
+    }
+  }, [activeNotes, lastActiveNotes.length, prevActiveNotes.length]);
+
+  /* Store previous activeNotes state */
+  useEffect(() => {
+    return () => setPrevActiveNotes(activeNotes.slice());
+  }, [activeNotes]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams();
+    if (lastActiveNotes.length) {
+      searchParams.set("notes", JSON.stringify(lastActiveNotes));
+    }
+    history.pushState({}, "", "?" + searchParams.toString());
+  }, [lastActiveNotes, isMuted]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    const activeNotesString = searchParams.get("activeNotes");
+    const activeNotesString = searchParams.get("notes");
     const showUIString = searchParams.get("showUI");
     if (showUIString) {
       setShowUI(JSON.parse(showUIString));
@@ -86,7 +114,13 @@ export default function App() {
             onKeyDown={handleKeyDown}
             onKeyUp={handleKeyUp}
           />
-          <Controls isMuted={isMuted} toggleMuted={() => setMuted(!isMuted)} />
+          <Controls
+            isCapturingScreenShot={isCapturingScreenShot}
+            handleCaptureScreenShot={handleCaptureScreenShot}
+            handleCopyLink={handleCopyLink}
+            toggleMuted={() => setMuted(!isMuted)}
+            isMuted={isMuted}
+          />
         </>
       )}
     </div>
