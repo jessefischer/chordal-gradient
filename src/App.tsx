@@ -43,8 +43,10 @@ export default function App() {
   );
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Link copied to clipboard");
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => alert("Link copied to clipboard"))
+      .catch(() => alert("Failed to copy to clipboard"));
   };
 
   const handleCaptureScreenShot = () => {
