@@ -19,6 +19,11 @@ export default async function (req: VercelRequest, res: VercelResponse) {
 
 
   const notes = JSON.parse( req.query['notes'] as string)
+
+  const host = req.headers.host;
+
+  console.log('host', host)
+  console.log('headers', JSON.stringify(req.headers));
   
   const page = await browser.newPage();
   await page.setViewport({
@@ -26,7 +31,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
     height: 1080,
   });
   const notesString = JSON.stringify(notes);
-  const url =  'http://localhost:3000/?notes=' + encodeURIComponent(notesString) + '&showUI=false';
+  const url =  'https://rainbow-sounds.vercel.app/?notes=' + encodeURIComponent(notesString) + '&showUI=false';
   console.log(url )
   await page.goto(url)
   await page.waitForTimeout(1000);
