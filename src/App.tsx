@@ -16,7 +16,8 @@ export default function App() {
   const [prevActiveNotes, setPrevActiveNotes] = useState<Array<number>>([]);
 
   const [isMuted, setMuted] = useState(false);
-  const [isCapturingScreenShot, setIsCapturingScreenShot] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isCapturingScreenShot, _setIsCapturingScreenShot] = useState(false);
   const [showUI, setShowUI] = useState(true);
 
   const handleKeyDown = useCallback(
