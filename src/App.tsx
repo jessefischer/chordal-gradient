@@ -49,8 +49,11 @@ export default function App() {
       .catch(() => alert("Failed to copy to clipboard"));
   };
 
+  /* Capture screen shot */
   const handleCaptureScreenShot = () => {
-    setIsCapturingScreenShot(true);
+    window.location.href =
+      window.location.origin + "/api/capture?notes=" +
+      encodeURIComponent(JSON.stringify(lastActiveNotes));
     setPrevActiveNotes([]);
   };
 
@@ -83,31 +86,11 @@ export default function App() {
     return () => setPrevActiveNotes(activeNotes.slice());
   }, [activeNotes]);
 
-  /* Capture screen shot */
-  useEffect(() => {
-    if (
-      isCapturingScreenShot &&
-      prevActiveNotes.length &&
-      activeNotes.length === 0
-    ) {
-      setIsCapturingScreenShot(false);
-      window.location.href =
-        "https://rainbow-sounds.vercel.app/api/capture?notes=" +
-        encodeURIComponent(JSON.stringify(lastActiveNotes));
-    }
-  }, [
-    isCapturingScreenShot,
-    activeNotes.length,
-    prevActiveNotes.length,
-    lastActiveNotes,
-  ]);
-
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    console.log("searchParams", searchParams);
     const activeNotesString = searchParams.get("notes");
     const showUIString = searchParams.get("showUI");
-    console.log(showUIString, activeNotesString);
+
     if (showUIString) {
       setShowUI(JSON.parse(showUIString));
     }

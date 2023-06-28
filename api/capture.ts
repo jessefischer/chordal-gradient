@@ -20,11 +20,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   });
 
   const notes = JSON.parse(req.query['notes'] as string);
-
   const host = req.headers.host;
-
-  console.log('host', host);
-  console.log('headers', JSON.stringify(req.headers));
 
   const page = await browser.newPage();
   await page.setViewport({
@@ -32,21 +28,14 @@ export default async function (req: VercelRequest, res: VercelResponse) {
     height: 1080,
   });
   const notesString = JSON.stringify(notes);
-  const url =
-    'https://rainbow-sounds.vercel.app/?notes=' +
-    encodeURIComponent(notesString) +
-    '&showUI=false';
-  console.log(url);
+  const url = `https://${host}/?notes=${encodeURIComponent(
+    notesString
+  )}&showUI=false`;
   await page.goto(url);
-  await page.waitForTimeout(1000);
-
-  console.log('cwd: ', process.cwd());
 
   const uuid = Math.floor(Math.random() * 100000);
   await page.screenshot({ path: `/tmp/rainbow-sounds-${uuid}.png` });
-
   const file = path.join(`/tmp/rainbow-sounds-${uuid}.png`);
-  console.log('file: ', file);
   const stringified = readFileSync(file);
 
   res.setHeader('Content-Type', 'image/x-png');
