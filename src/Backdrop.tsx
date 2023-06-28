@@ -20,9 +20,10 @@ const huesToLinearGradient = (
 
 interface IBackdropProps {
   activeNotes: Array<number>;
+  shouldFadeIn: boolean;
 }
 
-export const Backdrop = ({ activeNotes }: IBackdropProps) => {
+export const Backdrop = ({ activeNotes, shouldFadeIn }: IBackdropProps) => {
   const [background, setBackground] = useState<string>();
   const [opacity, setOpacity] = useState(0);
 
@@ -56,7 +57,7 @@ export const Backdrop = ({ activeNotes }: IBackdropProps) => {
 
   return (
     <div
-      className={styles.backdrop}
+      className={styles.backdrop + shouldFadeIn ? " " + styles.transition : ""}
       style={{
         background,
         opacity,
