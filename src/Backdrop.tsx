@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { KEYS, MIDDLE_C } from "./constants";
 
+import classNames from 'classnames/bind'
+
 import styles from "./Backdrop.module.css";
+
+const cx = classNames.bind(styles)
 
 const noteToHue = (note: number) =>
   Math.floor(((note - MIDDLE_C) * 360) / KEYS.length);
@@ -57,7 +61,7 @@ export const Backdrop = ({ activeNotes, shouldFadeIn }: IBackdropProps) => {
 
   return (
     <div
-      className={styles.backdrop + shouldFadeIn ? " " + styles.transition : ""}
+      className={cx('backdrop', { shouldFadeIn: shouldFadeIn })}
       style={{
         background,
         opacity,
