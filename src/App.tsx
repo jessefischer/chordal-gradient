@@ -127,7 +127,7 @@ export default function App() {
 
   return (
     <div className={styles.app}>
-      <Backdrop activeNotes={activeNotes} />
+      <Backdrop activeNotes={lastActiveNotes} />
       <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
       <MIDIConnector setActiveNotes={setActiveNotes} />
       {showUI && (
