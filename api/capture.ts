@@ -32,6 +32,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
     notesString
   )}&showUI=false`;
   await page.goto(url);
+  console.log('url', url);
 
   const uuid = Math.floor(Math.random() * 100000);
   await page.screenshot({ path: `/tmp/rainbow-sounds-${uuid}.png` });
