@@ -40,7 +40,6 @@ export default async function (req: VercelRequest, res: VercelResponse) {
 
   res.setHeader('Content-Type', 'image/x-png');
   res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
-  res.setHeader('Set-Cookie', 'RainbowSoundsScreenshotDelivered=true');
   res.setHeader(
     'Content-Disposition',
     `attachment; filename="rainbow-sounds-${uuid}.png"`
