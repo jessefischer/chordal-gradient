@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import Snackbar from '@mui/material/Snackbar';
 
 import { Controls } from "./Controls";
 import { KeyboardGroup } from "./KeyboardGroup";
@@ -19,6 +20,8 @@ export default function App() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isCapturingScreenShot, setIsCapturingScreenShot] = useState(false);
   const [showUI, setShowUI] = useState(true);
+  const [isSnackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("")
 
   const handleKeyDown = useCallback(
     (note: number) => {
@@ -46,13 +49,21 @@ export default function App() {
   const handleCopyLink = () => {
     navigator.clipboard
       .writeText(window.location.href)
-      .then(() => alert("Link copied to clipboard"))
-      .catch(() => alert("Failed to copy to clipboard"));
+      .then(() => {
+        setSnackbarOpen(true);
+        setSnackbarMessage("Link copied to clipboard");
+      })
+      .catch(() => {
+        setSnackbarOpen(true);
+        setSnackbarMessage("Failed to copy to clipboard");
+      });
   };
 
   /* Capture screen shot */
   const handleCaptureScreenShot = () => {
     setIsCapturingScreenShot(true);
+    setSnackbarOpen(true);
+    setSnackbarMessage("Preparing screenshot capture...");
     window.location.href =
       window.location.origin + "/api/capture?notes=" +
       encodeURIComponent(JSON.stringify(lastActiveNotes));
@@ -132,6 +143,13 @@ export default function App() {
           />
         </>
       )}
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={6000}
+        message={snackbarMessage}
+        onClose={() => setSnackbarOpen(false)}
+      />
+
     </div>
   );
 }
