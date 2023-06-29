@@ -17,7 +17,7 @@ export default function App() {
 
   const [isMuted, setMuted] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isCapturingScreenShot, _setIsCapturingScreenShot] = useState(false);
+  const [isCapturingScreenShot, setIsCapturingScreenShot] = useState(false);
   const [showUI, setShowUI] = useState(true);
 
   const handleKeyDown = useCallback(
@@ -52,10 +52,12 @@ export default function App() {
 
   /* Capture screen shot */
   const handleCaptureScreenShot = () => {
+    setIsCapturingScreenShot(true);
     window.location.href =
       window.location.origin + "/api/capture?notes=" +
       encodeURIComponent(JSON.stringify(lastActiveNotes));
     setPrevActiveNotes([]);
+    setTimeout(() => setIsCapturingScreenShot(false), 5000);
   };
 
   useEffect(() => {
