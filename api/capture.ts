@@ -26,8 +26,11 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   const xPos = req.query['xPos'];
   const yPos = req.query['yPos'];
 
-  const width = Number(req.query['width']) || 1920;
-  const height = Number(req.query['height']) || 1080;
+  const width = Number(req.query['width']);
+  const height = Number(req.query['height']);
+
+  console.log('width:', width);
+  console.log('height:', height);
 
   const host = req.headers.host;
 
