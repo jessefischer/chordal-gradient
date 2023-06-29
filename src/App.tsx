@@ -74,10 +74,10 @@ export default function App() {
     setSnackbarMessage("Preparing image download...");
     window.location.href =
       window.location.origin + "/api/capture?notes=" +
-      encodeURIComponent(JSON.stringify(lastActiveNotes)); +
-        "&angleInDeg=" + encodeURIComponent(angleInDeg) +
-        "&xPos=" + encodeURIComponent(xPos) +
-        "&yPos=" + encodeURIComponent(yPos);
+      encodeURIComponent(JSON.stringify(lastActiveNotes)) +
+      "&angleInDeg=" + encodeURIComponent(angleInDeg) +
+      "&xPos=" + encodeURIComponent(xPos) +
+      "&yPos=" + encodeURIComponent(yPos);
     setTimeout(() => setIsCapturingScreenShot(false), 3000);
   };
 
