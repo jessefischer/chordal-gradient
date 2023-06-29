@@ -51,11 +51,11 @@ export default function App() {
       .writeText(window.location.href)
       .then(() => {
         setSnackbarOpen(true);
-        setSnackbarMessage("Link copied to clipboard");
+        setSnackbarMessage("Link copied to clipboard.");
       })
       .catch(() => {
         setSnackbarOpen(true);
-        setSnackbarMessage("Failed to copy to clipboard");
+        setSnackbarMessage("Failed to copy to clipboard.");
       });
   };
 
@@ -63,7 +63,7 @@ export default function App() {
   const handleCaptureScreenShot = () => {
     setIsCapturingScreenShot(true);
     setSnackbarOpen(true);
-    setSnackbarMessage("Preparing screenshot capture...");
+    setSnackbarMessage("Preparing image download...");
     window.location.href =
       window.location.origin + "/api/capture?notes=" +
       encodeURIComponent(JSON.stringify(lastActiveNotes));
