@@ -114,7 +114,7 @@ export default function App() {
   useEffect(() => {
     if (initialized) return;
     const searchParams = new URLSearchParams(window.location.search);
-    const activeNotesString = searchParams.get("notes");
+    const notesString = searchParams.get("notes");
     const showUIString = searchParams.get("showUI");
     const xPosString = searchParams.get('xPos');
     const yPosString = searchParams.get('yPos');
@@ -123,9 +123,9 @@ export default function App() {
     if (showUIString) {
       setShowUI(JSON.parse(showUIString));
     }
-    if (activeNotesString) {
-      setPrevActiveNotes(JSON.parse(activeNotesString));
-      setActiveNotes(JSON.parse(activeNotesString));
+    if (notesString) {
+      setPrevActiveNotes(JSON.parse(notesString));
+      setLastActiveNotes(JSON.parse(notesString));
       setMuted(true);
     }
     if (xPosString) {
@@ -169,7 +169,7 @@ export default function App() {
       {showUI && (
         <>
           <KeyboardGroup
-            activeNotes={activeNotes}
+            activeNotes={lastActiveNotes}
             onKeyDown={handleKeyDown}
             onKeyUp={handleKeyUp}
           />
