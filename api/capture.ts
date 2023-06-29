@@ -19,8 +19,6 @@ export default async function (req: VercelRequest, res: VercelResponse) {
     headless: false,
   });
 
-  console.log(JSON.stringify(req.query));
-
   const notes = JSON.parse(req.query['notes'] as string);
   const angleInDeg = req.query['angleInDeg'];
   const xPos = req.query['xPos'];
@@ -29,10 +27,8 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   const width = Number(req.query['width']);
   const height = Number(req.query['height']);
 
-  console.log('width:', width);
-  console.log('height:', height);
-
   const host = req.headers.host;
+  const protocol = host?.includes('localhost') ? 'http' : 'https';
 
   const page = await browser.newPage();
   await page.setViewport({
@@ -40,7 +36,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
     height,
   });
   const notesString = JSON.stringify(notes);
-  const url = `https://${host}/?notes=${encodeURIComponent(
+  const url = `${protocol}://${host}/?notes=${encodeURIComponent(
     notesString
   )}&showUI=false&angleInDeg=${angleInDeg}&xPos=${xPos}&yPos=${yPos}`;
   await page.goto(url);
