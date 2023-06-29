@@ -16,7 +16,6 @@ export default function App() {
   const [prevActiveNotes, setPrevActiveNotes] = useState<Array<number>>([]);
 
   const [isMuted, setMuted] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isCapturingScreenShot, setIsCapturingScreenShot] = useState(false);
   const [showUI, setShowUI] = useState(true);
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
