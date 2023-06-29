@@ -6,39 +6,64 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { IconButton } from "@mui/material";
 
 import styles from "./Controls.module.css";
+import { Keyboard } from "./Keyboard";
 
 interface IControlsProps {
+  activeNotes: Array<number>;
   isMuted: boolean;
   isCapturingScreenShot: boolean;
+  onKeyDown: (note: number) => void;
+  onKeyUp: (note: number) => void;
   handleCaptureScreenShot: () => void;
   handleCopyLink: () => void;
   toggleMuted: () => void;
 }
 
 export const Controls = ({
+  activeNotes,
   isMuted,
   isCapturingScreenShot,
+  onKeyDown,
+  onKeyUp,
   handleCaptureScreenShot,
   handleCopyLink,
   toggleMuted,
+
 }: IControlsProps) => (
   <div className={styles.controls}>
-    <IconButton
-      onClick={handleCaptureScreenShot}
-      className={isCapturingScreenShot ? styles.active : undefined}
-      size="large"
+    <p
+      className={
+        activeNotes.length
+          ? styles["helper-text-hidden"]
+          : styles["helper-text"]
+      }
     >
-      <PhotoCameraIcon fontSize="small" />
-    </IconButton>
-    <IconButton onClick={handleCopyLink} size="large">
-      <InsertLinkIcon fontSize="small" />
-    </IconButton>
-    <IconButton onClick={toggleMuted} size="large">
-      {isMuted ? (
-        <VolumeOffIcon fontSize="small" />
-      ) : (
-        <VolumeUpIcon fontSize="small" />
-      )}
-    </IconButton>
+      Press and hold or tap a key combination to create your Rainbow Sound
+      Identity.
+    </p>
+    <Keyboard
+      activeNotes={activeNotes}
+      onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
+    />
+    <div className={styles.row}>
+      <IconButton
+        onClick={handleCaptureScreenShot}
+        className={isCapturingScreenShot ? styles.active : undefined}
+        size="large"
+      >
+        <PhotoCameraIcon fontSize="small" />
+      </IconButton>
+      <IconButton onClick={handleCopyLink} size="large">
+        <InsertLinkIcon fontSize="small" />
+      </IconButton>
+      <IconButton onClick={toggleMuted} size="large">
+        {isMuted ? (
+          <VolumeOffIcon fontSize="small" />
+        ) : (
+          <VolumeUpIcon fontSize="small" />
+        )}
+      </IconButton>
+    </div>
   </div>
 );

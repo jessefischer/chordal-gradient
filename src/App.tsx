@@ -1,15 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 
+import { KEYS, MIDDLE_C } from "./constants";
+
+import { Backdrop } from "./Backdrop";
 import { Controls } from "./Controls";
-import { KeyboardGroup } from "./KeyboardGroup";
 import { SynthConnector } from "./SynthConnector";
+import { MIDIConnector } from "./MIDIConnector";
 
 import styles from "./App.module.css";
-
-import { KEYS, MIDDLE_C } from "./constants";
-import { Backdrop } from "./Backdrop";
-import { MIDIConnector } from "./MIDIConnector";
 
 export default function App() {
   const [activeNotes, setActiveNotes] = useState<Array<number>>([]);
@@ -172,20 +171,17 @@ export default function App() {
       <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
       <MIDIConnector setActiveNotes={setActiveNotes} />
       {showUI && (
-        <>
-          <KeyboardGroup
-            activeNotes={lastActiveNotes}
-            onKeyDown={handleKeyDown}
-            onKeyUp={handleKeyUp}
-          />
-          <Controls
-            isCapturingScreenShot={isCapturingScreenShot}
-            handleCaptureScreenShot={handleCaptureScreenShot}
-            handleCopyLink={handleCopyLink}
-            toggleMuted={() => setMuted(!isMuted)}
-            isMuted={isMuted}
-          />
-        </>
+        <Controls
+          activeNotes={lastActiveNotes}
+          onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
+          isCapturingScreenShot={isCapturingScreenShot}
+          handleCaptureScreenShot={handleCaptureScreenShot}
+          handleCopyLink={handleCopyLink}
+          toggleMuted={() => setMuted(!isMuted)}
+          isMuted={isMuted}
+        />
+
       )}
       <Snackbar
         open={isSnackbarOpen}

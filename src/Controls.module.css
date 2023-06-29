@@ -1,3 +1,12 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .controls {
   position: fixed;
   bottom: 0;
@@ -6,27 +15,49 @@
   z-index: 100;
   padding: 20px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 2em;
+  align-items: center;
 
-  & button {
-    aspect-ratio: 1;
-    border: 0;
-    border-radius: 100%;
-    background: rgba(255, 255, 255, 0.2);
+  .helper-text {
+    animation: 1.5s ease-in-out fadeIn;
+    animation-delay: 2s;
+    animation-fill-mode: both;
+    transition: opacity 100ms;
+    font-weight: bold;
+    text-align: center;
   }
 
-  & button:hover {
-    background: rgba(255, 255, 255, 0.3);
+  .helper-text-hidden {
+    opacity: 0;
+    transition: opacity 250ms;
   }
 
-  & button svg {
-    fill: white;
-  }
+  .row {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
 
-  & button.active {
-    background: white;
-    & svg {
-      fill: black;
+    & button {
+      aspect-ratio: 1;
+      border: 0;
+      border-radius: 100%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    & button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    & button svg {
+      fill: white;
+    }
+
+    & button.active {
+      background: white;
+      & svg {
+        fill: black;
+      }
     }
   }
 }
