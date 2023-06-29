@@ -23,19 +23,13 @@ export default function App() {
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("")
 
+  const [initialized, setInitialized] = useState(false);
+
   const [angleInDeg, setAngleInDeg] = useState<number>(() =>
     Math.floor(Math.random() * 360)
   );
   const [xPos, setXPos] = useState<number>(() => Math.random() * 100);
   const [yPos, setYPos] = useState<number>(() => Math.random() * 100);
-
-  useEffect(() => {
-    if (prevActiveNotes.length === 0) {
-      setAngleInDeg(Math.floor(Math.random() * 360));
-      setXPos(Math.random() * 100);
-      setYPos(Math.random() * 100);
-    }
-  }, [prevActiveNotes]);
 
   const handleKeyDown = useCallback(
     (note: number) => {
@@ -111,30 +105,62 @@ export default function App() {
 
   /* Store previous activeNotes state */
   useEffect(() => {
-    return () => setPrevActiveNotes(activeNotes.slice());
-  }, [activeNotes]);
+    return () => {
+      if (!initialized) return;
+      setPrevActiveNotes(activeNotes.slice());
+    }
+  }, [activeNotes, initialized]);
 
+  /* Retrieve params from URL */
   useEffect(() => {
+    if (initialized) return;
     const searchParams = new URLSearchParams(window.location.search);
     const activeNotesString = searchParams.get("notes");
     const showUIString = searchParams.get("showUI");
+    const xPosString = searchParams.get('xPos');
+    const yPosString = searchParams.get('yPos');
+    const angleInDegString = searchParams.get('angleInDeg');
 
     if (showUIString) {
       setShowUI(JSON.parse(showUIString));
     }
     if (activeNotesString) {
+      setPrevActiveNotes(JSON.parse(activeNotesString));
       setActiveNotes(JSON.parse(activeNotesString));
       setMuted(true);
     }
-  }, []);
+    if (xPosString) {
+      setXPos(Number(xPosString));
+    }
+    if (yPosString) {
+      setYPos(Number(yPosString));
+    }
+    if (angleInDegString) {
+      setAngleInDeg(Number(angleInDegString));
+    }
+    setInitialized(true);
+  }, [initialized]);
 
+  /* Set URL from app state */
   useEffect(() => {
+    if (!initialized) return;
     const searchParams = new URLSearchParams();
     if (lastActiveNotes.length) {
       searchParams.set("notes", JSON.stringify(lastActiveNotes));
+      searchParams.set("angleInDeg", JSON.stringify(angleInDeg));
+      searchParams.set("xPos", JSON.stringify(xPos));
+      searchParams.set("yPos", JSON.stringify(yPos));
     }
     history.pushState({}, "", "?" + searchParams.toString());
-  }, [lastActiveNotes, isMuted]);
+  }, [initialized, lastActiveNotes, isMuted, angleInDeg, xPos, yPos]);
+
+  useEffect(() => {
+    if (prevActiveNotes.length === 0 && initialized) {
+      setAngleInDeg(Math.floor(Math.random() * 360));
+      setXPos(Math.random() * 100);
+      setYPos(Math.random() * 100);
+    }
+  }, [prevActiveNotes, initialized]);
 
   return (
     <div className={styles.app}>
