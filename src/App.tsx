@@ -147,6 +147,7 @@ export default function App() {
         open={isSnackbarOpen}
         autoHideDuration={6000}
         message={snackbarMessage}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setSnackbarOpen(false)}
       />
 
