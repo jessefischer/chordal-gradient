@@ -26,12 +26,15 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   const xPos = req.query['xPos'];
   const yPos = req.query['yPos'];
 
+  const width = Number(req.query['width']) || 1920;
+  const height = Number(req.query['height']) || 1080;
+
   const host = req.headers.host;
 
   const page = await browser.newPage();
   await page.setViewport({
-    width: 1920,
-    height: 1080,
+    width,
+    height,
   });
   const notesString = JSON.stringify(notes);
   const url = `https://${host}/?notes=${encodeURIComponent(

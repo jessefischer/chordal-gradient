@@ -77,7 +77,10 @@ export default function App() {
       encodeURIComponent(JSON.stringify(lastActiveNotes)) +
       "&angleInDeg=" + encodeURIComponent(angleInDeg) +
       "&xPos=" + encodeURIComponent(xPos) +
-      "&yPos=" + encodeURIComponent(yPos);
+      "&xPos=" + encodeURIComponent(xPos) +
+      "&yPos=" + encodeURIComponent(yPos) +
+      "&width=" + encodeURIComponent(window.innerWidth) +
+      "&height=" + encodeURIComponent(window.innerHeight);
     setTimeout(() => setIsCapturingScreenShot(false), 3000);
   };
 
