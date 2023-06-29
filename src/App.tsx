@@ -169,7 +169,7 @@ export default function App() {
       <Backdrop activeNotes={lastActiveNotes} shouldFadeIn={showUI} angleInDeg={angleInDeg} xPos={xPos} yPos={yPos} />
       <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
       <MIDIConnector setActiveNotes={setActiveNotes} />
-      {showUI && (
+      {showUI ? (
         <Controls
           activeNotes={lastActiveNotes}
           onKeyDown={handleKeyDown}
@@ -179,9 +179,8 @@ export default function App() {
           handleCopyLink={handleCopyLink}
           toggleMuted={() => setMuted(!isMuted)}
           isMuted={isMuted}
-        />
-
-      )}
+        />) :
+        <p className={styles.credit}>Created with Rainbow Sounds.</p>}
       <Snackbar
         open={isSnackbarOpen}
         autoHideDuration={3000}
@@ -189,7 +188,6 @@ export default function App() {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setSnackbarOpen(false)}
       />
-
     </div>
   );
 }
