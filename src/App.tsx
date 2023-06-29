@@ -75,7 +75,6 @@ export default function App() {
     window.location.href =
       window.location.origin + "/api/capture?notes=" +
       encodeURIComponent(JSON.stringify(lastActiveNotes));
-    setPrevActiveNotes([]);
     setTimeout(() => setIsCapturingScreenShot(false), 3000);
   };
 
