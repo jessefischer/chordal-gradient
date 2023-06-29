@@ -23,6 +23,20 @@ export default function App() {
   const [isSnackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("")
 
+  const [angleInDeg, setAngleInDeg] = useState<number>(() =>
+    Math.floor(Math.random() * 360)
+  );
+  const [xPos, setXPos] = useState<number>(() => Math.random() * 100);
+  const [yPos, setYPos] = useState<number>(() => Math.random() * 100);
+
+  useEffect(() => {
+    if (prevActiveNotes.length === 0) {
+      setAngleInDeg(Math.floor(Math.random() * 360));
+      setXPos(Math.random() * 100);
+      setYPos(Math.random() * 100);
+    }
+  }, [prevActiveNotes]);
+
   const handleKeyDown = useCallback(
     (note: number) => {
       if (activeNotes.includes(note)) return;
@@ -68,7 +82,7 @@ export default function App() {
       window.location.origin + "/api/capture?notes=" +
       encodeURIComponent(JSON.stringify(lastActiveNotes));
     setPrevActiveNotes([]);
-    setTimeout(() => setIsCapturingScreenShot(false), 5000);
+    setTimeout(() => setIsCapturingScreenShot(false), 3000);
   };
 
   useEffect(() => {
@@ -124,7 +138,7 @@ export default function App() {
 
   return (
     <div className={styles.app}>
-      <Backdrop activeNotes={lastActiveNotes} shouldFadeIn={showUI} />
+      <Backdrop activeNotes={lastActiveNotes} shouldFadeIn={showUI} angleInDeg={angleInDeg} xPos={xPos} yPos={yPos} />
       <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
       <MIDIConnector setActiveNotes={setActiveNotes} />
       {showUI && (
