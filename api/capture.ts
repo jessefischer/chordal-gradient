@@ -19,10 +19,12 @@ export default async function (req: VercelRequest, res: VercelResponse) {
     headless: false,
   });
 
+  console.log(JSON.stringify(req.query));
+
   const notes = JSON.parse(req.query['notes'] as string);
-  const angleInDeg = JSON.parse(req.query['angleInDeg'] as string);
-  const xPos = JSON.parse(req.query['xPos'] as string);
-  const yPos = JSON.parse(req.query['yPos'] as string);
+  const angleInDeg = req.query['angleInDeg'];
+  const xPos = req.query['xPos'];
+  const yPos = req.query['yPos'];
 
   const host = req.headers.host;
 
