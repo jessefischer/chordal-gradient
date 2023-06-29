@@ -34,6 +34,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   await page.setViewport({
     width,
     height,
+    deviceScaleFactor: 2
   });
   const notesString = JSON.stringify(notes);
   const url = `${protocol}://${host}/?notes=${encodeURIComponent(
