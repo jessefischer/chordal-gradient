@@ -20,6 +20,10 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   });
 
   const notes = JSON.parse(req.query['notes'] as string);
+  const angleInDeg = JSON.parse(req.query['angleInDeg'] as string);
+  const xPos = JSON.parse(req.query['xPos'] as string);
+  const yPos = JSON.parse(req.query['yPos'] as string);
+
   const host = req.headers.host;
 
   const page = await browser.newPage();
@@ -30,7 +34,7 @@ export default async function (req: VercelRequest, res: VercelResponse) {
   const notesString = JSON.stringify(notes);
   const url = `https://${host}/?notes=${encodeURIComponent(
     notesString
-  )}&showUI=false`;
+  )}&showUI=false&angleInDeg=${angleInDeg}&xPos=${xPos}&yPos=${yPos}`;
   await page.goto(url);
   await page.waitForTimeout(1000);
 
