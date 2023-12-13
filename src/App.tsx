@@ -9,6 +9,7 @@ import { SynthConnector } from "./SynthConnector";
 import { MIDIConnector } from "./MIDIConnector";
 
 import styles from "./App.module.css";
+import Overlay from "./Overlay";
 
 export default function App() {
   const [activeNotes, setActiveNotes] = useState<Array<number>>([]);
@@ -22,6 +23,7 @@ export default function App() {
   const [snackbarMessage, setSnackbarMessage] = useState("")
 
   const [initialized, setInitialized] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const [angleInDeg, setAngleInDeg] = useState<number>(() =>
     Math.floor(Math.random() * 360)
@@ -166,6 +168,7 @@ export default function App() {
 
   return (
     <div className={styles.app}>
+      {showOverlay && <Overlay handleClose={() => setShowOverlay(false)}/>}
       <Backdrop activeNotes={lastActiveNotes} shouldFadeIn={showUI} angleInDeg={angleInDeg} xPos={xPos} yPos={yPos} />
       <SynthConnector activeNotes={activeNotes} isMuted={isMuted} />
       <MIDIConnector setActiveNotes={setActiveNotes} />
@@ -179,6 +182,7 @@ export default function App() {
           handleCopyLink={handleCopyLink}
           toggleMuted={() => setMuted(!isMuted)}
           isMuted={isMuted}
+          showOverlay={() => setShowOverlay(true)}
         />) :
         <p className={styles.credit}>Created with Rainbow Sounds.</p>}
       <Snackbar

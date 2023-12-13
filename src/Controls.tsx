@@ -2,6 +2,7 @@ import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 import { IconButton } from "@mui/material";
 
@@ -17,6 +18,7 @@ interface IControlsProps {
   handleCaptureScreenShot: () => void;
   handleCopyLink: () => void;
   toggleMuted: () => void;
+  showOverlay: () => void;
 }
 
 export const Controls = ({
@@ -28,7 +30,7 @@ export const Controls = ({
   handleCaptureScreenShot,
   handleCopyLink,
   toggleMuted,
-
+  showOverlay
 }: IControlsProps) => (
   <div className={styles.controls}>
     <p
@@ -56,6 +58,9 @@ export const Controls = ({
       </IconButton>
       <IconButton onClick={handleCopyLink} size="large">
         <InsertLinkIcon fontSize="small" />
+      </IconButton>
+      <IconButton onClick={showOverlay} size="large">
+        <QuestionMarkIcon fontSize="small" />
       </IconButton>
       <IconButton onClick={toggleMuted} size="large">
         {isMuted ? (
