@@ -1,7 +1,7 @@
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
+// import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 import { IconButton } from "@mui/material";
@@ -24,10 +24,10 @@ interface IControlsProps {
 export const Controls = ({
   activeNotes,
   isMuted,
-  isCapturingScreenShot,
+  // isCapturingScreenShot,
   onKeyDown,
   onKeyUp,
-  handleCaptureScreenShot,
+  // handleCaptureScreenShot,
   handleCopyLink,
   toggleMuted,
   showOverlay
@@ -49,13 +49,13 @@ export const Controls = ({
       onKeyUp={onKeyUp}
     />
     <div className={styles.row}>
-      <IconButton
+      {/* <IconButton
         onClick={handleCaptureScreenShot}
         className={isCapturingScreenShot ? styles.active : undefined}
         size="large"
       >
         <PhotoCameraIcon fontSize="small" />
-      </IconButton>
+      </IconButton> */}
       <IconButton onClick={handleCopyLink} size="large">
         <InsertLinkIcon fontSize="small" />
       </IconButton>
